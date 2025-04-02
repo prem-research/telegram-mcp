@@ -14,7 +14,7 @@ source .venv/bin/activate
 uv sync
 ```
 
-2. edit .env file with your telegram api id and hash ([My Telegram](my.telegram.org)), don't share with others.
+2. edit .env file with your telegram api id and hash ([My Telegram](https://my.telegram.org)), don't share with others.
 
 3. start the http-server
 
