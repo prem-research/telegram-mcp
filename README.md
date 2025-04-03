@@ -8,8 +8,9 @@
 ## Usage
 
 1. install dependencies
+
 ```
-pip3 instsall uv
+pip3 install uv
 uv venv
 source .venv/bin/activate
 uv sync
