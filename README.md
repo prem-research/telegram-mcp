@@ -9,6 +9,7 @@
 
 1. install dependencies
 ```
+pip3 instsall uv
 uv venv
 source .venv/bin/activate
 uv sync
