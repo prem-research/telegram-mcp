@@ -1,5 +1,5 @@
 from mcp.server.fastmcp import FastMCP
-from requests import get, post
+from httpx import get, post
 from os import environ
 
 http_server = environ.get("HTTP_SERVER", "127.0.0.1")
