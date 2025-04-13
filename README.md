@@ -36,3 +36,12 @@ The MCP Server provides the following functions:
 - `get_entities`: Get all entities in the current session
 - `get_entity_by_id(id)`: Get an entity from the current session
 - `send_message(entity_id, content, reply_to_message_id)`: Send a message to an entity with optional markup and reply
+
+## Common Issues & How to Fix
+
+- Claude can't run MCP server >> Install uv with brew : `brew install uv`
+- Can't create new app in Telegram >> Disconnect VPN and retry
+
+## License
+
+[MIT](https://choosealicense.com/licenses/mit/)
