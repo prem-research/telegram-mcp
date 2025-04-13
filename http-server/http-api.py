@@ -16,8 +16,25 @@ async def telegram_connection():
 """
 
 
+def handle_binary_data(obj):
+    if isinstance(obj, bytes):
+        try:
+            return obj.decode('utf-8', errors='replace')
+        except Exception:
+            return '[Binary content]'
+    elif isinstance(obj, dict):
+        return {k: handle_binary_data(v) for k, v in obj.items()}
+    elif isinstance(obj, (list, tuple)):
+        return [handle_binary_data(item) for item in obj]
+    return obj
+
 async def format_entity(entity: Entity) -> dict:
-    return entity.to_dict()
+    try:
+        entity_dict = entity.to_dict()
+        return handle_binary_data(entity_dict)
+    except Exception as e:
+        print(f"Error formatting entity: {e}")
+        return {"error": "Failed to format entity"}
 
 
 @app.get("/get_unread_chats")
@@ -56,9 +73,17 @@ async def get_messages(chat_id: int, count: int = 0):
             entity = await client.get_entity(e_id)
             entities[e_id] = entity
 
+        # Handle message text that might be binary
+        message_text = message.message
+        if isinstance(message_text, bytes):
+            try:
+                message_text = message_text.decode('utf-8', errors='replace')
+            except Exception:
+                message_text = '[Binary content]'
+
         messages += [
             {
-                "text": message.message,
+                "text": message_text,
                 "date": message.date,
                 "id": message.id,
                 "from": await format_entity(entity=entities[e_id]),
@@ -75,14 +100,19 @@ async def get_chats():
     chats = {}
 
     async for dialog in client.iter_dialogs():
-        chats[dialog.id] = {
-            "id": dialog.id,
-            "title": dialog.name,
-            "unread_count": dialog.unread_count,
-            "is_pinned": dialog.pinned,
-            "type": dialog.entity.to_dict()["_"],
-            "last_message_id": dialog.message.id,
-        }
+        try:
+            entity_dict = handle_binary_data(dialog.entity.to_dict())
+            chats[dialog.id] = {
+                "id": dialog.id,
+                "title": dialog.name,
+                "unread_count": dialog.unread_count,
+                "is_pinned": dialog.pinned,
+                "type": entity_dict.get("_", "unknown"),
+                "last_message_id": dialog.message.id if dialog.message else None,
+            }
+        except Exception as e:
+            print(f"Error processing dialog {dialog.id}: {e}")
+            continue
 
     return chats
 
