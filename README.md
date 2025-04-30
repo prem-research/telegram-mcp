@@ -26,6 +26,10 @@ uv sync
 
 `uv run mcp install mcp-server/mcp-server.py`
 
+<a href="https://glama.ai/mcp/servers/@prem-research/telegram-mcp">
+  <img width="380" height="200" src="https://glama.ai/mcp/servers/@prem-research/telegram-mcp/badge" alt="Telegram Server MCP server" />
+</a>
+
 ## Available Functions
 
 The MCP Server provides the following functions:
